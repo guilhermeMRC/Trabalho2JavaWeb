@@ -5,23 +5,11 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui"> 
 
-<h:head>
-	
-</h:head> 
-<body>
-	
-	<h1>PDV</h1>
-	<h:form>
-		<h:commandLink action="controle?faces-redirect=true" 
-		value="Controle" />
-		
-		<h:panelGrid columns="2">
-			<p:inputText placeholder="Item..."/>
-			<p:commandButton value="Add"/>
-        </h:panelGrid>
-        
-	</h:form>
-	
-		
-</body> 
+<h:head></h:head> 
+<ui:composition template="/TEMPLATE/meutemplate.xhtml">
+<ui:define name="titulo"> Relatórios </ui:define>
+
+<ui:define name="conteudo">
+</ui:define>
+</ui:composition>
 </html>

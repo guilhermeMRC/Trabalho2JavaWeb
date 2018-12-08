@@ -15,9 +15,9 @@ public class Venda {
 	@Id @GeneratedValue
 	private Long id;
 	private String cpfCliente;
-	private Date dataVaenda;
+	private Date dataVenda;
 	
-	@OneToMany //aqui pode ter um cascade
+	@OneToMany //cascade pode aqui sim
 	private List<ItemVenda> itensVenda;
 	
 	@OneToOne
@@ -43,12 +43,12 @@ public class Venda {
 		this.cpfCliente = cpfCliente;
 	}
 
-	public Date getDataVaenda() {
-		return dataVaenda;
+	public Date getDataVenda() {
+		return dataVenda;
 	}
 
-	public void setDataVaenda(Date dataVaenda) {
-		this.dataVaenda = dataVaenda;
+	public void setDataVenda(Date dataVenda) {
+		this.dataVenda = dataVenda;
 	}
 
 	public List<ItemVenda> getItensVenda() {

@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<link type="text/css" rel="stylesheet"
+	href="#{request.contextPath}/template/style.css"/>
+</h:head> 
+
+<body> 
+<div class="pagina">
+
+	<div class="cabecalho"><h1> <ui:insert name="titulo"></ui:insert></h1>
+		
+		<p:menubar>
+			<p:menuitem value="Home" url="index.xhtml" icon="ui-icon-home"/>
+			<p:menuitem value="Cadastro de Produtos" url="produto.xhtml"/>
+			<p:menuitem value="Estoque Baixo" url="estoque.xhtml"/>
+			<p:menuitem value="Relatório" url="relatorio.xhtml"/>
+		</p:menubar>
+	</div>
+	
+	<div class="conteudo"> <ui:insert name="conteudo"></ui:insert></div>
+	
+</div>
+	<div class="rodape"> <ui:insert name="rodape"> CVFE </ui:insert></div>
+</body> 
+</html>

@@ -1,0 +1,42 @@
+*{
+	margin: 0;
+}
+
+body{
+	background-color: #E1FEFD;
+}
+
+.ui-widget-content {
+	font-size: 1em;
+	background-color: #96cbe8;
+}
+
+.pagina{
+	width: 90%;
+	margin: 0 auto;
+	background-color: #C4FDFC;
+	min-height: 750px;
+}
+
+.cabecalho{
+	text-align: center;
+	padding: 4px 0 0 0;	
+	
+}
+
+.conteudo{
+	padding: 13px 3px 10px 3px;
+	border-left: 1px dotted;
+	border-right: 1px dotted;
+	border-color: blue;
+	
+}
+
+.rodape{
+	background-color: #3c62e2;
+	height: 50px;
+	text-align: center;
+	padding-top: 25px;
+	
+}
+

@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"> 
+
+<ui:composition template="/TEMPLATE/meutemplate.xhtml">
+<ui:define name="titulo"> Gerenciamento de Produtos </ui:define>
+
+<ui:define name="conteudo">
+<h:form id="priformu">
+	<p:growl showDetail="true" life="7000" id="growl"/>
+	<h:panelGrid columns="2">
+		<p:outputLabel value="Código " for="codigo"/>
+		<p:inputText value="#{produtoBean.produto.codigo}" id="codigo"/>
+	
+		<p:outputLabel value="Nome: " for="nome"/>
+		<p:inputText value="#{produtoBean.produto.nome}" id="nome"/>
+		
+		<p:outputLabel value="Descrição: " for="descricao"/>
+		<p:inputText value="#{produtoBean.produto.descricao}" id="descricao"/>
+		
+		<p:outputLabel value="Preço: " for="preco" />
+		<p:inputText value="#{produtoBean.produto.preco}" id="preco"/>
+		
+		<p:outputLabel value="Quantidade: " for="quantidade"/>
+		<p:inputText value="#{produtoBean.produto.quantidade}" id="quantidade"/>
+		
+		<p:commandButton action="#{produtoBean.gravar()}" value="Gravar" update="@form, segformu" process="@form"/>
+		
+	</h:panelGrid>
+</h:form>
+
+	<h:form>
+		<h:panelGrid columns="2">
+			<h:outputLabel value="Filtrar: " for="filtar" />
+			<h:inputText value="#{produtoBean.filtro}" id="filtrar"/>
+			<h:commandButton action="#{produtoBean.filtraPorNome()}" value="Filtrar" />
+		</h:panelGrid>	
+	</h:form>
+
+<h:form id="segformu">
+	<p:dataTable value="#{produtoBean.produtos}" var="produtoAtual" paginator="true" rows="5" rowsPerPageTemplate="2,5,10">
+		<p:column headerText="Código">
+			#{produtoAtual.codigo}
+		</p:column>
+		<p:column headerText="Nome">
+			#{produtoAtual.nome}
+		</p:column>
+		<p:column headerText="Descrição">
+			#{produtoAtual.descricao}
+		</p:column>
+		<p:column headerText="Preço">
+			#{produtoAtual.preco}
+		</p:column>
+		<p:column headerText="Quantidade">
+			#{produtoAtual.quantidade}
+		</p:column>
+		<p:column headerText="Ações">
+			<p:commandButton action="#{produtoBean.editar(produtoAtual)}" value="Editar" update="priformu"/>
+			<p:commandButton action="#{produtoBean.excluir(produtoAtual)}" value="Excluir" update="segformu, :priformu:growl"/>
+		</p:column>
+	</p:dataTable>
+</h:form>
+</ui:define>
+</ui:composition>
+</html>
