@@ -16,6 +16,7 @@ import org.jboss.classpool.spi.SystemClassPool;
 import org.primefaces.component.calendar.Calendar;
 
 import com.arjuna.ats.internal.jdbc.drivers.modifiers.list;
+import com.sun.tools.xjc.reader.xmlschema.ExpressionBuilder;
 
 import antlr.debug.SyntacticPredicateListener;
 import modelo.ItemVenda;
@@ -27,7 +28,7 @@ import service.ProdutoService;
 
 @ManagedBean
 @ViewScoped
-public class PdvBean {
+public class VendaBean {
 
 	@EJB
 	ProdutoService produtoservice;
@@ -44,11 +45,15 @@ public class PdvBean {
 	private TipoPagamento tipoDinheiro = TipoPagamento.DINHEIRO;
 	private TipoPagamento tipoCartão = TipoPagamento.CARTAO;
 	
+	private boolean exibirCartão = false;
+	private boolean exibirDinheiro = false;
+	
 	@PostConstruct
 	public void init(){
 		
 		atualizarLista();
 		itensVenda = new ArrayList<>();
+		pagamento.setQuantidadeParcelas(1);
 		
 	}
 	
@@ -73,7 +78,9 @@ public class PdvBean {
 			valorTotal = valorTotal + iv.getTotalItem();
 		}
 		
-		return valorTotal;
+		//setar o valor direto na classe pagamento
+		pagamento.setValorTotal(valorTotal);
+		return pagamento.getValorTotal();
 	}
 	
 	public void atualizarLista(){
@@ -81,6 +88,52 @@ public class PdvBean {
 		produtos = produtoservice.listAll();
 	}
 	
+	public void escolhaPagamentoCartao(TipoPagamento tipoPagamento) {
+		
+		
+		switch (tipoPagamento.toString()) {
+		case "CARTAO":
+			
+			exibirCartão = true;
+			exibirDinheiro = false;
+			break;
+			
+		case "DINHEIRO":
+			
+			exibirCartão = false;
+			exibirDinheiro = true;
+			break;
+			
+		default:
+			
+			exibirCartão = false;
+			exibirDinheiro = false;
+			break;
+		}
+		
+	}
+	
+	public void gravarVenda() {
+		
+		System.out.println("");
+	}
+	
+	public boolean isExibirCartão() {
+		return exibirCartão;
+	}
+
+	public void setExibirCartão(boolean exibirCartão) {
+		this.exibirCartão = exibirCartão;
+	}
+
+	public boolean isExibirDinheiro() {
+		return exibirDinheiro;
+	}
+
+	public void setExibirDinheiro(boolean exibirDinheiro) {
+		this.exibirDinheiro = exibirDinheiro;
+	}
+
 	public TipoPagamento getTipoDinheiro() {
 		return tipoDinheiro;
 	}
@@ -152,6 +205,6 @@ public class PdvBean {
 	public void setProduto(Produto produto) {
 		this.produto = produto;
 	}
-	
+
 	
 }
