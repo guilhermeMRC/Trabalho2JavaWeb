@@ -46,7 +46,10 @@ public class VendaBean {
 	private TipoPagamento tipoCartão = TipoPagamento.CARTAO;
 	
 	private boolean exibirCartão = false;
-	private boolean exibirDinheiro = false;
+	private boolean exibirDinheiro = true;
+	
+	private Double dinheiroCliente = 0.00D;
+	private Double troco = 0.00D;
 	
 	@PostConstruct
 	public void init(){
@@ -88,18 +91,20 @@ public class VendaBean {
 		produtos = produtoservice.listAll();
 	}
 	
-	public void escolhaPagamentoCartao(TipoPagamento tipoPagamento) {
+	public void escolhaPagamentoCartao(Pagamento pagamento) {
 		
 		
-		switch (tipoPagamento.toString()) {
+		switch (pagamento.getTipo().toString()) {
 		case "CARTAO":
 			
+			pagamento.setQuantidadeParcelas(1);
 			exibirCartão = true;
 			exibirDinheiro = false;
 			break;
 			
 		case "DINHEIRO":
 			
+			pagamento.setQuantidadeParcelas(1);
 			exibirCartão = false;
 			exibirDinheiro = true;
 			break;
@@ -115,9 +120,40 @@ public class VendaBean {
 	
 	public void gravarVenda() {
 		
-		System.out.println("");
+		venda.setDataVenda(new Date());
+		System.out.println(pagamento.getQuantidadeParcelas() + " - " +
+			pagamento.getValorParcela() + " - " +
+			pagamento.getValorTotal() + " - " + 
+			pagamento.getTipo());
+		
+		System.out.println(venda.getDataVenda() + " - " + 
+							venda.getCpfCliente() + " - ");
+		
+		
 	}
 	
+	public void calcularTroco() {
+		
+		troco = dinheiroCliente - pagamento.getValorTotal();
+		
+	}
+	
+	public Double getTroco() {
+		return troco;
+	}
+
+	public void setTroco(Double troco) {
+		this.troco = troco;
+	}
+
+	public Double getDinheiroCliente() {
+		return dinheiroCliente;
+	}
+
+	public void setDinheiroCliente(Double dinheiroCliente) {
+		this.dinheiroCliente = dinheiroCliente;
+	}
+
 	public boolean isExibirCartão() {
 		return exibirCartão;
 	}

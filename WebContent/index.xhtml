@@ -53,7 +53,9 @@
          </p:dataTable>
  
 	</h:form>
+	
 	<br/>
+	
 	<h:form id="formCarrinho">
 		<p:dataTable var="item" value="#{vendaBean.itensVenda}" widgetVar="carrinho"
               paginator="true" rows="5" rowsPerPageTemplate="2,5,10">
@@ -150,39 +152,53 @@
 	        	
         	</p:dataTable>
         	
-        	<p:fieldset legend="Tipo de Pagamento" id="selecionarTipoPagamento">
+        	<p:fieldset id="selecionarTipoPagamento">
 	        	<h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5" >
 			        <p:outputLabel for="opPagamento" value="Tipo de Pagamento: " />
-			        <p:selectOneMenu id="opPagamento" value="#{vendaBean.pagamento.tipo}" style="width:125px">
-			            <f:selectItem itemLabel="#{vendaBean.tipoCartão}" itemValue="#{vendaBean.tipoCartão}" />
+			        <p:selectOneMenu id="opPagamento" value="#{vendaBean.pagamento.tipo}" style="width:125px" >
 			            <f:selectItem itemLabel="#{vendaBean.tipoDinheiro}" itemValue="#{vendaBean.tipoDinheiro}"/>
-			            <p:ajax event="change" listener="#{vendaBean.escolhaPagamentoCartao(vendaBean.pagamento.tipo)}"   
+			            <f:selectItem itemLabel="#{vendaBean.tipoCartão}" itemValue="#{vendaBean.tipoCartão}" />
+			            <p:ajax event="change" listener="#{vendaBean.escolhaPagamentoCartao(vendaBean.pagamento)}"   
 						process="selecionarTipoPagamento" update="cartao, dinheiro"/>
 			        </p:selectOneMenu>
 	        	</h:panelGrid>
         	</p:fieldset>
         	
         	<p:fieldset id="cartao">
-	        	<h:panelGrid columns="5" rendered="#{vendaBean.exibirCartão}">
+	        	<h:panelGrid columns="2" rendered="#{vendaBean.exibirCartão}">
 	        		
 	        		<h:outputText value="Valor Total: " />
-	        		<h:outputText value="R$ #{vendaBean.valorTotal(vendaBean.itensVenda)} x"/>
+	        		<h:outputText value="R$ #{vendaBean.valorTotal(vendaBean.itensVenda)} /"/>
+	        		
 	        		<h:outputText value="Parcelas: " />
 	        		<p:spinner id="ajaxSpinnerQtdParcelas" value="#{vendaBean.pagamento.quantidadeParcelas}" min="1" max="12" size="5">
 	        			<p:ajax update="valorParcela, cartao" process="@this" />
 	        		</p:spinner>
-                	<h:outputText value="valor: R$ #{vendaBean.pagamento.valorParcela}" id="valorParcela"/>
+                	
+                	<h:outputText value="Valor das parcelas:"/> 
+                	<p:outputLabel value="R$ #{vendaBean.pagamento.valorParcela}" id="valorParcela"/>
                 	
 	        	</h:panelGrid>
         	</p:fieldset>
         	
         	<p:fieldset id="dinheiro">
 	        	<h:panelGrid columns="2" rendered="#{vendaBean.exibirDinheiro}">
-	        		<h:outputText value="aaaa" />
+	        		<p:outputLabel value="Pagamento do Cliente: " />
+	        		<p:spinner id="ajaxSpinnerPagamentoCliente" value="#{vendaBean.dinheiroCliente}" prefix="R$" stepFactor="0.1" size="8" >
+	        			<p:ajax listener="#{vendaBean.calcularTroco()}" update="calcTroco, dinheiro" process="@this"/>
+	        		</p:spinner>
+                    
+                    <p:outputLabel value="Valor Total: "/>
+                    <h:outputLabel value="R$ #{vendaBean.valorTotal(vendaBean.itensVenda)}"/>
+                    
+                    <p:outputLabel value="Troco: R$ "/>
+                    <p:outputLabel value="#{vendaBean.troco}" id="calcTroco"/>
+                    
+                
 	        	</h:panelGrid>
         	</p:fieldset>
         	
-        	<p:commandButton></p:commandButton>
+        	<p:commandButton value="Salvar" action="#{vendaBean.gravarVenda()}" />
 		</p:dialog>		
 	</h:form>
 	
