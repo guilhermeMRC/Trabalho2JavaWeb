@@ -15,14 +15,16 @@
 		<h:commandLink action="controle?faces-redirect=true" 
 		value="Controle" />
 		
-		 <p:dataTable var="produto" value="#{vendaBean.produtos}" widgetVar="estoque"
+		<p:growl life="5000" id="message" showDetail="false"/>
+			
+		<p:dataTable var="produto" value="#{vendaBean.produtos}" widgetVar="estoque"
                  emptyMessage="Não foi encontrado o produto..." filteredValue="#{vendaBean.produtosFiltrados}" 
-                 paginator="true" rows="5" rowsPerPageTemplate="2,5,10">
+                 paginator="true" rows="5" rowsPerPageTemplate="2,5,10" id="e">
                  
-                 <f:facet name="header">
+                <f:facet name="header">
 		            <p:outputPanel>
 		                <h:outputText value="Procure em todos os campos:" />
-		                <p:inputText id="globalFilter" onkeyup="PF('estoque').filter()" style="width:230px" placeholder="Digite para buscar..."/>
+		                <p:inputText id="globalFilter" onkeyup="PF('estoque').filter()" style="width:230px" placeholder="Digite para buscar..." />
 		            </p:outputPanel>
 	        	</f:facet>
 	        	
@@ -47,7 +49,7 @@
         		</p:column>
         		
         		<p:column headerText="ADD" footerText="contains">
-            		<p:commandButton value="Add" action="#{vendaBean.AddCarrinho(produto)}" update="formEstoque, :formCarrinho" process="@form"/>
+            		<p:commandButton value="Add" action="#{vendaBean.AddCarrinho(produto)}" update="formEstoque, :formCarrinho" process="@form" />
         		</p:column>
                  
          </p:dataTable>
@@ -95,11 +97,11 @@
     			</f:facet>
 	        	
         </p:dataTable>
+        
+        <p:commandButton value="Finalizar Compra" type="button" onclick="PF('dlg2').show();"/>
+		<p:commandButton value="Cancelar Compra" action="#{vendaBean.LimparTudo()}" update="formCarrinho, formEstoque" process="@form"/>
 		
-		<p:commandButton value="Finalizar Compra" type="button" onclick="PF('dlg2').show();"/>
-		<p:commandButton value="Cancelar Compra"/>
-		
-		<p:dialog header="Modal Dialog" widgetVar="dlg2" modal="true">
+		<p:dialog header="Modal Dialog" widgetVar="dlg2" modal="true" >
     		
 			<h:panelGrid columns="2">
 				
@@ -113,47 +115,44 @@
 			
 			<br/>
 			
-    		<p:dataTable var="item" value="#{vendaBean.itensVenda}" widgetVar="carrinho"
+    		<p:dataTable var="itemCarrinho" value="#{vendaBean.itensVenda}"
               paginator="true" rows="5" rowsPerPageTemplate="2,5,10">
                  
                 <f:facet name="header">
 		            <p:outputPanel>
-		                <h:outputText value="Carrinho" />
+		                <p:outputLabel value="Carrinho" />
 		            </p:outputPanel>
 	        	</f:facet>
 	        	
 	        	<p:column headerText="COD" footerText="contains">
-            		<h:outputText value="#{item.produto.codigo}" />
+            		<p:outputLabel value="#{itemCarrinho.produto.codigo}" />
         		</p:column>
 	        	
 	        	<p:column headerText="Decrição" footerText="contains">
-            		<h:outputText value="#{item.produto.descricao}" />
+            		<p:outputLabel value="#{itemCarrinho.produto.descricao}" />
         		</p:column>
         		
         		<p:column headerText="Quantidade" footerText="contains">
-            		<p:spinner id="ajaxSpinnerQtd" value="#{item.quantidade}" min="1" max="#{item.produto.quantidade}" size="5">
-                		<p:ajax update="ajaxSpinnerValue, formCarrinho" process="@this" />
-            		</p:spinner>
+            		<p:outputLabel value="#{itemCarrinho.quantidade}" />	
         		</p:column>
         		
         		<p:column headerText="Preço Unitário" footerText="contains">
-            		<p:spinner id="ajaxSpinnerPreco" value="#{item.valorUnitario}" prefix="R$" stepFactor="0.10" size="8">
-                		<p:ajax update="ajaxSpinnerValue, formCarrinho" process="@this" />
-            		</p:spinner>
+            		<p:outputLabel value="R$ #{itemCarrinho.valorUnitario}" />
         		</p:column>
         		
         		<p:column headerText="Total/item" footerText="contains">
-            		<h:outputText id="ajaxSpinnerValue" value="R$ #{item.totalItem}" />
+            		<p:outputLabel value="R$ #{itemCarrinho.totalItem}" />
         		</p:column>
         		
         		<f:facet name="footer">
-        		 	<h:outputText id="ajaxSpinnerValueTotal" value="Total: R$ #{vendaBean.valorTotal(vendaBean.itensVenda)}" />
+        		 	<p:outputLabel value="Total: R$ #{vendaBean.valorTotal(vendaBean.itensVenda)}" />
     			</f:facet>
 	        	
         	</p:dataTable>
         	
         	<p:fieldset id="selecionarTipoPagamento">
 	        	<h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5" >
+			        
 			        <p:outputLabel for="opPagamento" value="Tipo de Pagamento: " />
 			        <p:selectOneMenu id="opPagamento" value="#{vendaBean.pagamento.tipo}" style="width:125px" >
 			            <f:selectItem itemLabel="#{vendaBean.tipoDinheiro}" itemValue="#{vendaBean.tipoDinheiro}"/>
@@ -161,6 +160,7 @@
 			            <p:ajax event="change" listener="#{vendaBean.escolhaPagamentoCartao(vendaBean.pagamento)}"   
 						process="selecionarTipoPagamento" update="cartao, dinheiro"/>
 			        </p:selectOneMenu>
+			        
 	        	</h:panelGrid>
         	</p:fieldset>
         	

@@ -3,6 +3,7 @@ package modelo;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -17,10 +18,10 @@ public class Venda {
 	private String cpfCliente;
 	private Date dataVenda;
 	
-	@OneToMany //cascade pode aqui sim
+	@OneToMany (cascade=CascadeType.PERSIST)
 	private List<ItemVenda> itensVenda;
 	
-	@OneToOne
+	@OneToOne (cascade=CascadeType.PERSIST)
 	private Pagamento pagamento;
 	
 	public Venda() {

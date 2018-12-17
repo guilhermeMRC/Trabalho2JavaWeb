@@ -25,6 +25,7 @@ import modelo.Produto;
 import modelo.TipoPagamento;
 import modelo.Venda;
 import service.ProdutoService;
+import service.VendaService;
 
 @ManagedBean
 @ViewScoped
@@ -32,6 +33,9 @@ public class VendaBean {
 
 	@EJB
 	ProdutoService produtoservice;
+	
+	@EJB
+	VendaService vendaservice;
 	
 	private List<Produto> produtos = new ArrayList<>();
 	private List<Produto> produtosFiltrados;
@@ -120,7 +124,31 @@ public class VendaBean {
 	
 	public void gravarVenda() {
 		
+		Produto produto = new Produto();
+		
 		venda.setDataVenda(new Date());
+		venda.setItensVenda(itensVenda);
+		venda.setPagamento(pagamento);
+		
+		for(ItemVenda iv : itensVenda) {
+			
+			produto = iv.getProduto();
+			Integer quantidadeResultante = produto.getQuantidade() - iv.getQuantidade();
+			produto.setQuantidade(quantidadeResultante);
+			produtoservice.merge(produto);
+			
+		}
+		
+		try {
+			
+			vendaservice.create(venda);
+			System.out.println("Venda criada com Sucesso!");
+			
+		}catch (Exception e) {
+			
+			System.out.println(e.getMessage());
+		}
+		
 		System.out.println(pagamento.getQuantidadeParcelas() + " - " +
 			pagamento.getValorParcela() + " - " +
 			pagamento.getValorTotal() + " - " + 
@@ -135,6 +163,18 @@ public class VendaBean {
 	public void calcularTroco() {
 		
 		troco = dinheiroCliente - pagamento.getValorTotal();
+		
+	}
+	
+	public void LimparTudo() {
+		
+		venda.setCpfCliente("000.000.000-00");
+		setProduto(new Produto());
+		setVenda(new Venda());
+		setPagamento(new Pagamento());
+		getItensVenda().clear();
+		getProdutos().clear();
+		setProdutos(produtoservice.listAll());
 		
 	}
 	
